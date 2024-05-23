@@ -9,10 +9,11 @@ const insertByCommand = (text: string) => {
 
 const insertAtCaret = (target: HTMLElement, text: string) => {
     const selection = window.getSelection();
+    const plainText = text.replace(/\n+$/, '');
     if (selection?.rangeCount) {
         const range = selection.getRangeAt(0);
         range.deleteContents();
-        const node = document.createTextNode(text);
+        const node = document.createTextNode(plainText);
         range.insertNode(node);
 
         // Move caret to the end of the newly inserted text node.
@@ -26,7 +27,7 @@ const insertAtCaret = (target: HTMLElement, text: string) => {
         // Dispatch input event to trigger Markdown Input to parse the new text
         target.dispatchEvent(new Event('input', {bubbles: true}));
     } else {
-        insertByCommand(text);
+        insertByCommand(plainText);
     }
 };
 
